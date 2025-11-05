@@ -10,9 +10,9 @@ const ChatApp = () => {
   const messagesEndRef = useRef(null);
 
   // Mock API function - replace with your actual API endpoint
-  const apiCall = async (message) => {
+  const apiCall = async (path='/response',message) => {
     try {
-      const api = getApiConfig();
+      const api = `${getApiConfig()}${path}`;
       console.log(api)
       const response = await fetch(api, {
         method: 'POST',
@@ -37,9 +37,9 @@ const ChatApp = () => {
     }
   };
 
-   const apiResetCall = async (message) => {
+   const apiResetCall = async (path='reset',message) => {
     try {
-      const api = getApiConfig();
+      const api = `${getApiConfig()}${path}`;
       console.log(api)
       const response = await fetch(api, {
         method: 'POST',
