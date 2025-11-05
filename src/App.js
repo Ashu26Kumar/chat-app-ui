@@ -11,26 +11,54 @@ const ChatApp = () => {
 
   // Mock API function - replace with your actual API endpoint
   const apiCall = async (message) => {
-     try {
-       const api = getApiConfig();
-    const response = await fetch(api, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message: message })
-    });
+    try {
+      const api = getApiConfig();
+      console.log(api)
+      const response = await fetch(api, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message })
+      });
 
-    if (!response.ok) {
-      throw new Error('API request failed');
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+      if(!api.includes("reset")){ const data = await response.json();
+      return data.reply;
+      } 
+      else{
+        return true;
+      }
+        // Adjust based on your API response structure
+    } catch (error) {
+      throw new Error('Failed to get response from API');
     }
-
-    const data = await response.json();
-    return data.reply; // Adjust based on your API response structure
-  } catch (error) {
-    throw new Error('Failed to get response from API');
-  }
   };
+
+   const apiResetCall = async (message) => {
+    try {
+      const api = getApiConfig();
+      console.log(api)
+      const response = await fetch(api, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message })
+      });
+
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+      return true;
+        // Adjust based on your API response structure
+    } catch (error) {
+      throw new Error('Failed to get response from API');
+    }
+  };
+  
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -83,9 +111,13 @@ const ChatApp = () => {
     }
   };
 
-  const handleReset = () => {
-    setMessages([]);
-    setConnectionStatus('disconnected');
+  const handleReset = async () => {
+    
+    const isContextCleared = await apiResetCall()
+    if(isContextCleared){
+      setMessages([]);
+      setConnectionStatus('connected');
+    }
   };
 
   const handleKeyPress = (e) => {
