@@ -55,7 +55,8 @@ const ChatApp = () => {
       return true;
         // Adjust based on your API response structure
     } catch (error) {
-      throw new Error('Failed to get response from API');
+      return true;
+      //throw new Error('Failed to get response from API');
     }
   };
   
@@ -112,12 +113,16 @@ const ChatApp = () => {
   };
 
   const handleReset = async () => {
-    
+    setIsLoading(true);
+    setConnectionStatus('connecting');
+
     const isContextCleared = await apiResetCall()
     if(isContextCleared){
       setMessages([]);
       setConnectionStatus('connected');
     }
+    setIsLoading(false);
+
   };
 
   const handleKeyPress = (e) => {
